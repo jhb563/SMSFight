@@ -45,10 +45,7 @@ app.post('/message', function(req, res) {
       });
     } else if (game) {
       // interpret then move! 
-      console.log(game.player1.health);
-      console.log(game.player2.health);
-      console.log(game.phoneNumber);
-      twiml.message('You have started a new game');
+      twiml.message('Making a move in an existing game!');
       res.writeHead(200, {'Content-Type': 'text/xml'});
       res.end(twiml.toString());
     } else {
