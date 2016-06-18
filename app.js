@@ -11,8 +11,8 @@ app.get('/', function(req, res) {
 
 app.post('/message', function(req, res) {
   var twiml = new twilio.TwimlResponse();
-  console.log(req);
-  if (req.query.body == 'start') {
+  console.log(req.query.Body);
+  if (req.query.Body == 'start') {
     twiml.message("Game started!");
   } else {
     twiml.message("I don't recognize that!");
