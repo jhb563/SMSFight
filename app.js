@@ -12,7 +12,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 var twilioClient = new twilio.RestClient(process.env.twilio_sid || creds.sid, process.env.twilio_token || creds.token);
 
 app.get('/', function(req, res) {
-    res.send("Hello");
+    //res.send("+16507536033");
+    res.sendfile('index.html');
 });
 
 var STARTING_HEALTH = 20;
