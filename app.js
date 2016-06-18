@@ -35,21 +35,26 @@ app.post('/message', function(req, res) {
         phoneNumber : fromNumber,
         finished: false
       });
-      newGame.save();
-      // Start the game by either asking the player for their first move
-      // or making a move for the computer and THEN asking the player for
-      // their move. 
-      twiml.message('You have started a new game!');
+      newGame.save().then(function(doc) {
+        // Start the game by either asking the player for their first move
+        // or making a move for the computer and THEN asking the player for
+        // their move. 
+        twiml.message('You have started a new game!');
+        res.writeHead(200, {'Content-Type': 'text/xml'});
+        res.end(twiml.toString());
+      });
     } else if (game) {
       // interpret then move! 
       console.log(game.player1.health);
       console.log(game.player2.health);
       console.log(game.phoneNumber);
       twiml.message('You have started a new game');
+      res.writeHead(200, {'Content-Type': 'text/xml'});
+      res.end(twiml.toString());
     } else {
       twiml.message('I do not understand your message!');
-    res.writeHead(200, {'Content-Type': 'text/xml'});
-    res.end(twiml.toString());
+      res.writeHead(200, {'Content-Type': 'text/xml'});
+      res.end(twiml.toString());
     }
   });
   /*
