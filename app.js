@@ -130,14 +130,14 @@ function eachRound(twiml, game, move) {
   console.log(game);
 
   playGame(twiml, player1, move);
-  continueGame = checkHealth(player1, player2);
+  continueGame = checkHealth(twiml, player1, player2);
 
   if (!continueGame) {
     return;
   }
 
   playGame(twiml, player2, randomMove());
-  continueGame = checkHealth(player2, player1);
+  continueGame = checkHealth(twiml, player2, player1);
 
   if (!continueGame) {
     return;
