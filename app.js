@@ -12,7 +12,7 @@ var port = process.env.PORT || 5000;
 var server = app.listen(port, function() {
   console.log("App listening!");
 });
-
+var startGame = false;
 var MOVES =  {
   punch: {
 
@@ -20,8 +20,34 @@ var MOVES =  {
   kick: true
 };
 
-playGame('person', move);
-playGame('ai', randomMove);
+if (!startGame) {
+  choosePlayers();
+  sendRules();
+  startGame = true;
+} else {
+  eachRound();
+}
+
+
+function choosePlayers() {
+  if (randomeNumber(0,1)) {
+    player1 = 'player';
+    player2 = 'ai';
+  } else {
+    player1 = 'ai';
+    player2 = 'player';
+  }
+}
+
+function sendRules() {
+
+}
+
+function eachRound() {
+  playGame(player1, move);
+  playGame(player2, move);
+}
+
 
 function playGame(move){
   // Is this a move
