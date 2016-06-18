@@ -1,7 +1,5 @@
 var express = require('express');
-var twilio = require('twilio');
-var creds = require('./creds.js');
-
+var Health = require('./health.js')
 var app = express();
 
 app.get('/', function(req, res) {
@@ -10,6 +8,9 @@ app.get('/', function(req, res) {
 
 var port = process.env.PORT || 5000;
 var server = app.listen(port, function() {
+  // var test = new Health();
+  // test.subtractHealth(3);
+  // console.log(test.health);
   console.log("App listening!");
 });
 var startGame = false;
