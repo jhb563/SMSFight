@@ -25,7 +25,7 @@ app.post('/message', function(req, res) {
 
 var port = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGODB_URL);
+mongoose.connect(process.env.MONGODB_URI);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
