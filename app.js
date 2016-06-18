@@ -16,7 +16,14 @@ app.get('/', function(req, res) {
 
 app.post('/message', function(req, res) {
   var twiml = new twilio.TwimlResponse();
-  console.log(req.body);
+  var fromNumber = req.body.From;
+  Game.Game.findOne({phoneNumber: fromNumber, finished: true}).exec(function(err, game) {
+    if(err) throw err;
+    if (!game) {
+      console.log("Should start new game!");
+    }
+  });
+  /*
   if (req.body.Body == 'start') {
     twiml.message("Game started!");
   } else {
@@ -24,6 +31,7 @@ app.post('/message', function(req, res) {
   }
   res.writeHead(200, {'Content-Type': 'text/xml'});
   res.end(twiml.toString());
+  */
 });
 
 var port = process.env.PORT || 5000;
