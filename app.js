@@ -21,7 +21,7 @@ app.post('/message', function(req, res) {
   var twiml = new twilio.TwimlResponse();
   var fromNumber = req.body.From;
   var message = req.body.Body;
-  Game.Game.findOne({phoneNumber: fromNumber, finished: true}).exec(function(err, game) {
+  Game.Game.findOne({phoneNumber: fromNumber, finished: false}).exec(function(err, game) {
     if(err) throw err;
     if (!game && message == 'start') {
       var c1 = new Character.Character({
@@ -33,27 +33,28 @@ app.post('/message', function(req, res) {
       var newGame = new Game.Game({
         player1 : c1,
         player2 : c2,
-        phoneNumber : fromNumber
+        phoneNumber : fromNumber,
+        finished: false
       });
-      newGame.save();
-      // Start the game by either asking the player for their first move
-      // or making a move for the computer and THEN asking the player for
-      // their move.
-      twiml.message('You have started a new game!');
+      newGame.save().then(function(doc) {
+        // Start the game by either asking the player for their first move
+        // or making a move for the computer and THEN asking the player for
+        // their move.
+        twiml.message('You have started a new game!');
+        res.writeHead(200, {'Content-Type': 'text/xml'});
+        res.end(twiml.toString());
+      });
     } else if (game) {
-      // interpret then move!
 
       game.player1.winResponse =  'Winner winner chicken dinner';
       game.player2.winResponse =  'Sky net win';
-      eachRound(game, message);
-
-      console.log(game.player1.health);
-      console.log(game.player2.health);
-      console.log(game.phoneNumber);
+      eachRound(twiml, game, message);
+      res.writeHead(200, {'Content-Type': 'text/xml'});
+      res.end(twiml.toString());
     } else {
       twiml.message('I do not understand your message!');
-    res.writeHead(200, {'Content-Type': 'text/xml'});
-    res.end(twiml.toString());
+      res.writeHead(200, {'Content-Type': 'text/xml'});
+      res.end(twiml.toString());
     }
   });
   /*
@@ -116,29 +117,25 @@ var MOVES =  {
   }
 };
 
-function sendRules() {
-  textResponse('Ready for battle.. send us a move "punch" or "kick"');
-}
-
-function textResponse(response){
+function textResponse(twiml, response){
   //text to user
   twiml.message(response);
 }
 
-function eachRound(game, move) {
+function eachRound(twiml, game, move) {
   var response = '';
   var continueGame = true;
   var player1 = game.player1;
   var player2 = game.player2;
 
-  playGame(player1, move);
+  playGame(twiml, player1, move);
   continueGame = checkHealth(player1, player2);
 
   if (!continueGame) {
     return;
   }
 
-  playGame(player2, randomMove());
+  playGame(twiml, player2, randomMove());
   continueGame = checkHealth(player2, player1);
 
   if (!continueGame) {
@@ -149,20 +146,20 @@ function eachRound(game, move) {
   Your is health is ${player1.health}
   AI's health is ${player2.health}`;
   console.log(response);
-  textResponse(response);
+  textResponse(twiml, response);
 }
 
-function checkHealth(player, opponent){
+function checkHealth(twiml, player, opponent){
   if (opponent.health <= 0){
     // Declare winner
-    textResponse(player.winResponse);
+    textResponse(twiml, player.winResponse);
     console.log(player.winResponse);
     return false;
   }
   return true;
 }
 
-function playGame(player, move){
+function playGame(twiml, player, move){
 
   // Did we hit
   if (didHit(move)) {
@@ -170,7 +167,7 @@ function playGame(player, move){
     player.health -= MOVES[move].damage;
   }
   else{
-    textResponse('sorry you missed');
+    textResponse(twiml, 'sorry you missed');
   }
 
 }
