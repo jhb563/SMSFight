@@ -33,20 +33,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function callback () {
 
-  var c1 = new Character.Character({
-    health: 20
-  });
-  var c2 = new Character.Character({
-    health: 20
-  });
-  var testGame = new Game.Game({
-    player1: c1,
-    player2: c2,
-    phoneNumber: "+1234567890"
-  });
-  c1.save();
-  c2.save();
-  testGame.save();
   var server = app.listen(port, function() {
     console.log("App listening!");
   });
