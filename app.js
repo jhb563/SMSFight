@@ -1,19 +1,85 @@
 var express = require('express');
 var Health = require('./health.js');
+var twilio = require('twilio');
+var creds = require('./creds.js');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var Character = require('./Character.js');
+var Game = require('./Game.js');
+
 var app = express();
+app.use(bodyParser.urlencoded({extended: true}));
+var twilioClient = new twilio.RestClient(process.env.twilio_sid || creds.sid, process.env.twilio_token || creds.token);
 
 app.get('/', function(req, res) {
     res.send("Hello");
 });
 
+var STARTING_HEALTH = 20;
+
+app.post('/message', function(req, res) {
+  var twiml = new twilio.TwimlResponse();
+  var fromNumber = req.body.From;
+  var message = req.body.Body;
+  Game.Game.findOne({phoneNumber: fromNumber, finished: true}).exec(function(err, game) {
+    if(err) throw err;
+    if (!game && message == 'start') {
+      var c1 = new Character.Character({
+        health: STARTING_HEALTH
+      });
+      var c2 = new Character.Character({
+        health: STARTING_HEALTH
+      });
+      var newGame = new Game.Game({
+        player1 : c1,
+        player2 : c2,
+        phoneNumber : fromNumber
+      });
+      newGame.save();
+      // Start the game by either asking the player for their first move
+      // or making a move for the computer and THEN asking the player for
+      // their move.
+      twiml.message('You have started a new game!');
+    } else if (game) {
+      // interpret then move!
+
+      game.player1.winResponse =  'Winner winner chicken dinner';
+      game.player2.winResponse =  'Sky net win';
+      eachRound(game, message);
+
+      console.log(game.player1.health);
+      console.log(game.player2.health);
+      console.log(game.phoneNumber);
+    } else {
+      twiml.message('I do not understand your message!');
+    res.writeHead(200, {'Content-Type': 'text/xml'});
+    res.end(twiml.toString());
+    }
+  });
+  /*
+  if (req.body.Body == 'start') {
+    twiml.message("Game started!");
+  } else {
+    twiml.message("I don't recognize that!");
+  }
+  res.writeHead(200, {'Content-Type': 'text/xml'});
+  res.end(twiml.toString());
+  */
+});
+
 var port = process.env.PORT || 5000;
-var server = app.listen(port, function() {
-  console.log("App listening!");
+
+mongoose.connect(process.env.MONGODB_URI);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function callback () {
+
+  var server = app.listen(port, function() {
+    console.log("App listening!");
+  });
 });
 var startGame = false;
-
-var player1;
-var player2;
 
 var boilerplateStarters = [
   'Your face has been', 'You just got', 'You\'ve been'
@@ -50,38 +116,20 @@ var MOVES =  {
   }
 };
 
-if (!startGame) {
-  choosePlayers();
-  sendRules();
-  startGame = true;
-} else {
-  eachRound(move);
-}
-
-function choosePlayers() {
-  player1 = {
-    health: new Health(3),
-    winResponse: 'Winner winner chicken dinner'
-  };
-  player2 = {
-    health: new Health(20),
-    winResponse: 'Sky net win'
-  };
-  console.log('player1 ', player1);
-  console.log('player2 ', player2);
-}
-
 function sendRules() {
   textResponse('Ready for battle.. send us a move "punch" or "kick"');
 }
 
 function textResponse(response){
   //text to user
+  twiml.message(response);
 }
 
-function eachRound(move) {
+function eachRound(game, move) {
   var response = '';
   var continueGame = true;
+  var player1 = game.player1;
+  var player2 = game.player2;
 
   playGame(player1, move);
   continueGame = checkHealth(player1, player2);
@@ -98,14 +146,14 @@ function eachRound(move) {
   }
 
   response = `${aiMoveResponse(move)}
-  Your is health is ${player1.health.health}
-  AI's health is ${player2.health.health}`;
+  Your is health is ${player1.health}
+  AI's health is ${player2.health}`;
   console.log(response);
   textResponse(response);
 }
 
 function checkHealth(player, opponent){
-  if (opponent.health.health <= 0){
+  if (opponent.health <= 0){
     // Declare winner
     textResponse(player.winResponse);
     console.log(player.winResponse);
@@ -119,8 +167,7 @@ function playGame(player, move){
   // Did we hit
   if (didHit(move)) {
     //subtract x from total health of opponent
-    player.health.subtractHealth(MOVES[move].damage);
-    console.log(`Subtracted ${MOVES[move].damage} from player`);
+    player.health -= MOVES[move].damage;
   }
   else{
     textResponse('sorry you missed');
