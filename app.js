@@ -11,7 +11,6 @@ var server = app.listen(port, function() {
   console.log("App listening!");
 });
 var startGame = false;
-var startGame = true;
 
 var player1;
 var player2;
@@ -56,11 +55,8 @@ if (!startGame) {
   sendRules();
   startGame = true;
 } else {
-  move = 'kick'
-  choosePlayers(); // remove for testing
   eachRound(move);
 }
-
 
 function choosePlayers() {
   player1 = {
@@ -76,11 +72,11 @@ function choosePlayers() {
 }
 
 function sendRules() {
-  console.log('send rules');
+  textResponse('Ready for battle.. send us a move "punch" or "kick"');
 }
 
-function textResponse(){
-
+function textResponse(response){
+  //text to user
 }
 
 function eachRound(move) {
@@ -127,7 +123,7 @@ function playGame(player, move){
     console.log(`Subtracted ${MOVES[move].damage} from player`);
   }
   else{
-    console.log('sorry you missed');
+    textResponse('sorry you missed');
   }
 
 }
