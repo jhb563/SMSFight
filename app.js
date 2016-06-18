@@ -20,7 +20,7 @@ app.post('/message', function(req, res) {
   var twiml = new twilio.TwimlResponse();
   var fromNumber = req.body.From;
   var message = req.body.Body;
-  Game.Game.findOne({phoneNumber: fromNumber, finished: true}).exec(function(err, game) {
+  Game.Game.findOne({phoneNumber: fromNumber, finished: false}).exec(function(err, game) {
     if(err) throw err;
     if (!game && message == 'start') {
       var c1 = new Character.Character({
