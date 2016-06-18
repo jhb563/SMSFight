@@ -193,6 +193,7 @@ function didHit(move) {
   return (successHit >= MOVES[move].successMin && successHit <= MOVES[move].successMax);
 }
 
+function aiMoveResponse(move) {
   if (move === 'punch') {
     return randomPunchResponse();
   } else if (move === 'kick') {
