@@ -1,0 +1,127 @@
+@import 'normalize.css';
+
+@font-face {
+    font-family: 'fighter', sans-serif;
+    src: url('../fonts/feasfbrg-webfont.woff2') format('woff2'),
+         url('../fonts/feasfbrg-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+html {
+    height:100%;
+    width:100%;
+    margin:0;
+    padding:0;
+}
+
+body {
+    background: url("../img/streetfighter_bg.jpg") no-repeat;
+    background-size: cover;
+    background-position: center center;
+    margin:0;
+    padding:0;
+    min-height:100%;
+    height:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+}
+
+div.bg-overlay {
+/*    background:0,0,0,1;
+    position:absolute;
+    height:100%;
+    width:100%;
+    top:0px;
+    left:0px;
+    z-index:1;*/
+}
+.container {
+    padding:10px 20px 10px 20px;
+}
+
+.content {
+    background:#fff;
+    border:solid 10px rgba(0,0,0,0.85);
+    border-radius: 20px;
+    box-sizing:border-box;
+    margin:150px auto;
+    max-width:400px;
+}
+
+h1 {
+    text-align: center;
+}
+h1.logo img {
+    margin-top: -100px;
+    max-width:200px;
+}
+
+form {
+    overflow:hidden;
+    width:100%;
+}
+
+p {
+    color:#555;
+    font-family: "Avenir Next", "Avenir", "Open Sans", "Helvetica", Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 140%;
+    text-align: center;
+    padding:0px 30px 0px 30px;
+}
+
+
+input[type="text"],
+input[type="url"],
+input[type="tel"],
+input[type="number"],
+input[type="color"],
+input[type="email"] {
+   border:solid 3px #b7b7b7;
+   font-family: 'Permanent Marker', cursive;    
+   padding:10px;
+   cursor:pointer;  
+   position: relative; 
+   z-index: 1;         
+}
+
+input[type="submit"] {
+    font-family: 'Permanent Marker', cursive; 
+    font-size:30px;     
+    padding-top:10px;
+    padding-bottom:10px;  
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 1);  
+    cursor:pointer;   
+    position: relative; 
+    z-index: 1;         
+}
+
+input {
+    font-size: 26px;
+    width:100%;
+    max-width:100%;
+
+}
+
+.btn{
+    border : solid 1px #000000;
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;    
+    font-size : 20px;
+    color : #ffffff;
+    padding : 1px 17px;
+    background : #ff760e;
+    background : -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff760e), color-stop(100%,#b24d00));
+    background : -moz-linear-gradient(top, #ff760e 0%, #b24d00 100%);
+    background : -webkit-linear-gradient(top, #ff760e 0%, #b24d00 100%);
+    background : -o-linear-gradient(top, #ff760e 0%, #b24d00 100%);
+    background : -ms-linear-gradient(top, #ff760e 0%, #b24d00 100%);
+    background : linear-gradient(top, #ff760e 0%, #b24d00 100%);
+    filter : progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff760e', endColorstr='#b24d00',GradientType=0 );
+
+}
+
