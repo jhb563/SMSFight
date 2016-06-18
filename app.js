@@ -32,7 +32,8 @@ app.post('/message', function(req, res) {
       var newGame = new Game.Game({
         player1 : c1,
         player2 : c2,
-        phoneNumber : fromNumber
+        phoneNumber : fromNumber,
+        finished: false
       });
       newGame.save();
       // Start the game by either asking the player for their first move
