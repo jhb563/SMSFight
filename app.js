@@ -62,3 +62,36 @@ function randomMove() {
 //   // based on move did we hit?
 //   return // random did we hit
 // }
+var boilerplateStarters = [
+  'Your face has been', 'You just got', 'You\'ve been'
+];
+
+var boilerplateEnders = [
+  'into oblivion', 'to dust', 'copius amounts', 'to the ground'
+];
+
+var punchVariation = [
+  'hadoukened', 'punched', 'slapped', 'bitch slapped', 'jabbed'
+];
+
+var kickVariation = [
+  'kicked', 'stomped', 'sonic boomed', 'walloped'
+];
+
+var emojis = ['💥', '💢', '💪', '😈', '🙀']
+
+function aiMoveResponse(move) {
+  if (move === 'punch') {
+    randomPunchResponse();
+  } else if (move === 'kick') {
+    randomPunchResponse();
+  }
+}
+
+function randomPunchResponse() {
+  return '👊  ' + boilerplateStarters[randomNumber(0, boilerplateStarters.length - 1)] + ' ' + punchVariation[randomNumber(0, punchVariation.length - 1)] + ' ' +  boilerplateEnders[randomNumber(0, boilerplateEnders.length - 1)] + '. ' + emojis[randomNumber(0, emojis.length - 1)];
+}
+
+function randomKickResponse() {
+  return '👣  ' + boilerplateStarters[randomNumber(0, boilerplateStarters.length - 1)] + ' ' + kickVariation[randomNumber(0, kickVariation.length - 1)] + ' ' +  boilerplateEnders[randomNumber(0, boilerplateEnders.length - 1)] + '. ' + emojis[randomNumber(0, emojis.length - 1)];
+}
