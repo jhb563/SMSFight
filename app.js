@@ -12,9 +12,7 @@ var server = app.listen(port, function() {
 });
 
 var MOVES =  {
-  punch: {
-
-  },
+  punch: true,
   kick: true
 };
 
@@ -42,12 +40,17 @@ function randomNumber(min, max) {
   // return random number within a range
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-//
-// function randomMove() {
-//   // return random move for ai
-// }
-//
-//
+
+function randomMove() {
+  // return random move for ai
+  var aiMoveNum = randomNumber(1,2);
+  if (aiMoveNum === 1) {
+    return 'punch';
+  } else if (aiMoveNum === 2) {
+    return 'kick';
+  }
+}
+
 // function isMove(move) {
 //   // If not a move return sorry not a move
 //   if (!MOVES[move]) {
