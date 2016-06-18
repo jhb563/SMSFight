@@ -11,10 +11,13 @@ app.get('/', function(req, res) {
 
 app.post('/message', function(req, res) {
   var twiml = new twilio.TwimlResponse();
-  twiml.message('Thanks for the text');
+  if (req.query.body == 'start') {
+    twiml.message("Game started!");
+  } else {
+    twiml.message("I don't recognize that!");
+  }
   res.writeHead(200, {'Content-Type': 'text/xml'});
   res.end(twiml.toString());
-  console.log("Received Request");
 });
 
 var port = process.env.PORT || 5000;
