@@ -127,6 +127,7 @@ function eachRound(twiml, game, move) {
   var continueGame = true;
   var player1 = game.player1;
   var player2 = game.player2;
+  console.log(game);
 
   playGame(twiml, player1, move);
   continueGame = checkHealth(player1, player2);
