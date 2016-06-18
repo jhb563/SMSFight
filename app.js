@@ -4,7 +4,7 @@ var creds = require('./creds.js');
 var bodyParser = require('body-parser');
 
 var app = express();
-app.user(bodyParser.urlencoded({extended: true});
+app.use(bodyParser.urlencoded({extended: true}));
 var twilioClient = new twilio.RestClient(process.env.twilio_sid || creds.sid, process.env.twilio_token || creds.token);
 
 app.get('/', function(req, res) {
