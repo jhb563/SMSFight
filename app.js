@@ -2,6 +2,7 @@ var express = require('express');
 var twilio = require('twilio');
 var creds = require('./creds.js');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
@@ -23,6 +24,13 @@ app.post('/message', function(req, res) {
 });
 
 var port = process.env.PORT || 5000;
-var server = app.listen(port, function() {
-  console.log("App listening!");
+
+mongoose.connect(process.env.MONGODB_URL);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+db.once('open', function callback () {
+  var server = app.listen(port, function() {
+    console.log("App listening!");
+  });
 });
