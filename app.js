@@ -16,9 +16,19 @@ var server = app.listen(port, function() {
 var startGame = false;
 var MOVES =  {
   punch: {
-
+    ranMin: 1,
+    ranMax: 10,
+    successMin: 4,
+    successMax: 10,
+    damage: 1
   },
-  kick: true
+  kick: {
+    ranMin: 1,
+    ranMax: 5,
+    successMin: 1,
+    successMax: 3,
+    damage: 3
+  }
 };
 
 if (!startGame) {
@@ -85,7 +95,8 @@ function isMove(move) {
 
 function didHit(move) {
   // based on move did we hit?
-  return // random did we hit
+  var successHit = randomNumber(move.ranMin, move.ranMax);
+  return (successHit >= move.successMin && successHit <= move.successMax);
 }
 
 
