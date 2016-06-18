@@ -129,14 +129,14 @@ function eachRound(twiml, game, move) {
   var player2 = game.player2;
   console.log(game);
 
-  playGame(twiml, player1, move);
+  playGame(twiml, player1, move, game);
   continueGame = checkHealth(twiml, player1, player2);
 
   if (!continueGame) {
     return;
   }
 
-  playGame(twiml, player2, randomMove());
+  playGame(twiml, player2, randomMove(), game);
   continueGame = checkHealth(twiml, player2, player1);
 
   if (!continueGame) {
@@ -146,6 +146,7 @@ function eachRound(twiml, game, move) {
   response = `${aiMoveResponse(move)}
   Your is health is ${player1.health}
   AI's health is ${player2.health}`;
+  game.save();
   console.log(response);
   textResponse(twiml, response);
 }
@@ -160,7 +161,7 @@ function checkHealth(twiml, player, opponent){
   return true;
 }
 
-function playGame(twiml, player, move){
+function playGame(twiml, player, move, game){
 
   // Did we hit
   if (didHit(move)) {
