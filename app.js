@@ -1,9 +1,9 @@
 var express = require('express');
 var twilio = require('twilio');
-//var creds = require('./creds.js');
+var creds = require('./creds.js');
 
 var app = express();
-//var twilioClient = new twilio.RestClient(creds.sid, creds.token);
+var twilioClient = new twilio.RestClient(process.env.twilio_sid || creds.sid, process.env.twilio_token || creds.token);
 
 app.get('/', function(req, res) {
     res.send("Hello");
