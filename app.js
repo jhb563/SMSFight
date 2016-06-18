@@ -49,6 +49,7 @@ app.post('/message', function(req, res) {
       twiml.message('I do not understand your message!');
     res.writeHead(200, {'Content-Type': 'text/xml'});
     res.end(twiml.toString());
+    }
   });
   /*
   if (req.body.Body == 'start') {
